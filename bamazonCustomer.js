@@ -26,8 +26,20 @@ function start() {
    connection.query(`SELECT * FROM products`, function (err, response) {
       if (err) throw err;
 
-      
+      printAllProducts(response);
       
    })
 
+}
+
+// Function to print all product info to the cli.
+function printAllProducts (res) {
+   for (let i = 0; i < res.length; i++) {
+      let item = res[i];
+      console.log(`
+      ID: ${item.item_id}
+      Name: ${item.product_name}
+      Price: $${item.price}`);
+      
+   }
 }
