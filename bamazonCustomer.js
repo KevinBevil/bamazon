@@ -1,4 +1,4 @@
-var config = requires("./config.js");
+var config = require("./config.js");
 
 var password = config.password;
 
@@ -15,7 +15,19 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
    if (err) throw err;
-   console.log("connected as id " + connection.threadId);
-
+   // console.log("connected as id " + connection.threadId);
+   start();
    connection.end();
 })
+
+// Main app
+function start() {
+
+   connection.query(`SELECT * FROM products`, function (err, response) {
+      if (err) throw err;
+
+      
+      
+   })
+
+}
