@@ -13,7 +13,7 @@ CREATE TABLE products (
 );
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES ('Mabelline Lipstick', 'Health & Beauty', 11, 140);
+VALUES ('Maybelline Lipstick', 'Health & Beauty', 11, 140);
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ('Walking Cane', 'Sports & Outdoors', 22, 36);
