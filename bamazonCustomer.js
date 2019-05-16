@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
    port: 3306,
    user: "root",
    password: password,
-   database: "bamazon_DB"
+   database: "bamazon_db"
 })
 
 connection.connect(function (err) {
@@ -19,7 +19,8 @@ connection.connect(function (err) {
    start();
    // connection.end();
 })
-
+var itemID;
+var quantity;
 // Main app
 function start() {
 
@@ -60,18 +61,21 @@ function customerShop() {
             type: 'input',
             message: 'How many would you like to buy?'
          }
-      ]).then(function(response) {
-         var itemID = response.item;
-         var quantity = parseInt(response.quantity);
+      ]).then(function (answers) {
+         itemID = parseInt(answers.item);
+         quantity = parseInt(answers.quantity);
 
-         // Find and check inventory of requested can satisfy request
-         connection.query(`SELECT * FROM products WHERE item_id = ${itemID}`,
-            function(err, res) {
-               if (err) throw err;
-// !!!!!! THIS IS WHERE STOCK QUANTITY COMES BACK AS UNDEFINED
-               console.log(res.stock_quantity);
-               
+         // Make sure the amount requested is in inventory
+         var query = connection.query('SELECT * FROM products WHERE item_id = 1',
+            function (error, data) {
+               if (error) throw err;
+               console.log(itemID);
+
+               console.log(data[0].stock_quantity);
             })
+         console.log(query.sql);
 
       })
+
 }
+
