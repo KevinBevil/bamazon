@@ -31,7 +31,7 @@ function start() {
 
       // Prompt user for which item to buy and how many
       customerShop();
-
+      // connection.end();
    })
 
 }
@@ -43,7 +43,8 @@ function printAllProducts(res) {
       console.log(`
       ID: ${item.item_id}
       Name: ${item.product_name}
-      Price: $${item.price}`);
+      Price: $${item.price}
+      *available: ${item.stock_quantity}`);
 
    }
 }
@@ -66,14 +67,47 @@ function customerShop() {
          quantity = parseInt(answers.quantity);
 
          // Make sure the amount requested is in inventory
-         var query = connection.query('SELECT * FROM products WHERE item_id = 1',
+         var query = connection.query(`SELECT * FROM products WHERE item_id = ${itemID}`,
             function (error, data) {
-               if (error) throw err;
-               console.log(itemID);
+               if (error) throw error;
 
-               console.log(data[0].stock_quantity);
+               var stockQuantity = data[0].stock_quantity;
+               var itemPrice = data[0].price;
+               // console.log(stockQuantity - quantity);
+
+               if (stockQuantity - quantity < 0) {
+                  console.log("Insufficient quantity!");
+                  console.log("Please consider purchasing a lower quantity or shopping for something else.");
+                  customerShop();
+
+                  return;
+               } else if (typeof (quantity) !== 'number' || !quantity || quantity <= 0) {
+                  console.log("Please make sure to enter a positive number for the quantity!");
+                  customerShop();
+               } else {
+                  connection.query(`UPDATE products
+                  SET stock_quantity = ${stockQuantity - quantity}
+                  WHERE item_id = ${itemID}`, function (error1) {
+                        if (error1) throw error1;
+                        console.log(`Thank you for your purchase!  Your shipment is being processed.  Your account has been charged $${itemPrice * quantity}`);
+                        inquirer.prompt([
+                           {
+                              name: 'continue',
+                              type: 'input',
+                              message: 'Do you wish to continue shopping? (Please enter "y" or "n")'
+                           }
+                        ]).then(function (cont) {
+                           if (cont.continue == 'y') {
+                              customerShop();
+                           } else {
+                              console.log('Thank you for shopping!');
+                              connection.end();
+
+                           }
+                        })
+                     })
+               }
             })
-         console.log(query.sql);
 
       })
 
