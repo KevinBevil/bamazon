@@ -67,7 +67,7 @@ function customerShop() {
          itemID = parseInt(answers.item);
          quantity = parseInt(answers.quantity);
 
-         if (itemID > 10) {
+         if (itemID > 10 || itemID < 1) {
             console.log("---------------------------------------");
             console.log("Please enter a number between 1 and 10!");
             console.log("---------------------------------------");
