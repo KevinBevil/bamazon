@@ -67,10 +67,17 @@ function customerShop() {
          itemID = parseInt(answers.item);
          quantity = parseInt(answers.quantity);
 
+         if (itemID > 10) {
+            console.log("Please enter a number between 1 and 10!");
+            customerShop();
+            return;
+         }
          // Make sure the amount requested is in inventory
          var query = connection.query(`SELECT * FROM products WHERE item_id = ${itemID}`,
             function (error, data) {
                if (error) throw error;
+
+               
 
                var stockQuantity = data[0].stock_quantity;
                var itemPrice = data[0].price;
