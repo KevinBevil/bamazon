@@ -68,7 +68,9 @@ function customerShop() {
          quantity = parseInt(answers.quantity);
 
          if (itemID > 10) {
+            console.log("---------------------------------------");
             console.log("Please enter a number between 1 and 10!");
+            console.log("---------------------------------------");
             customerShop();
             return;
          }
@@ -77,27 +79,32 @@ function customerShop() {
             function (error, data) {
                if (error) throw error;
 
-               
+
 
                var stockQuantity = data[0].stock_quantity;
                var itemPrice = data[0].price;
                // console.log(stockQuantity - quantity);
 
                if (stockQuantity - quantity < 0) {
+                  console.log("---------------------------------------------------------------------------");
                   console.log("Insufficient quantity!");
                   console.log("Please consider purchasing a lower quantity or shopping for something else.");
-                  customerShop();
+                  console.log("---------------------------------------------------------------------------"); customerShop();
 
                   return;
                } else if (typeof (quantity) !== 'number' || !quantity || quantity <= 0) {
+                  console.log("-------------------------------------------------------------");
                   console.log("Please make sure to enter a positive number for the quantity!");
+                  console.log("-------------------------------------------------------------");
                   customerShop();
                } else {
                   connection.query(`UPDATE products
                   SET stock_quantity = ${stockQuantity - quantity}
                   WHERE item_id = ${itemID}`, function (error1) {
                         if (error1) throw error1;
+                        console.log(`------------------------------------------------------------------------------------------------------`);
                         console.log(`Thank you for your purchase!  Your shipment is being processed.  Your account has been charged $${itemPrice * quantity}`);
+                        console.log(`------------------------------------------------------------------------------------------------------`);
                         inquirer.prompt([
                            {
                               name: 'continue',
@@ -108,7 +115,9 @@ function customerShop() {
                            if (cont.continue == 'y') {
                               customerShop();
                            } else {
+                              console.log('-----------------------');
                               console.log('Thank you for shopping!');
+                              console.log('-----------------------');
                               connection.end();
 
                            }
