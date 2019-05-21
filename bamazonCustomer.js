@@ -1,7 +1,8 @@
+// import server password, hidden by gitignore
 var config = require("./config.js");
-
 var password = config.password;
 
+// Mysql will be used for the database
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
